@@ -2,6 +2,19 @@ A simple driver for an Arduino controlled differential drive robot.
 Uses rosserial and assumes the use of an Arduino Mega + Pololu motor
 controller shield + Robogaia Mega Encoder shield.
 
+System Requirements
+===================
+This package requires an Arudino Mega controller + Pololu Dual VNH5019
+Motor Driver Shield + Robogaia Encoder shield.  You must also install
+the Polulu Arduino library found at:
+
+https://github.com/pololu/Dual-VNH5019-Motor-Shield
+
+and the Robogaia Encoder library found at:
+
+http://www.robogaia.com/uploads/6/8/0/9/6809982/__megaencodercounter-1.3.tar.gz
+
+
 Installation
 ============
 
