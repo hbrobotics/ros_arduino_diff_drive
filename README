@@ -20,7 +20,7 @@ Finally, it is assumed you are using version 1.0 or greater of the Arduino IDE.
 Installation
 ============
 
-$ roscd ~/ros_workspace
+$ cd ~/ros_workspace
 
 $ git clone https://github.com/hbrobotics/ros_arduino_diff_drive.git
 
