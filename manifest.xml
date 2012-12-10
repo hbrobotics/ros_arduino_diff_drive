@@ -1,0 +1,17 @@
+<package>
+  <description brief="ros_arduino_diff_drive">
+
+A simple driver for an Arduino controlled differential drive robot.
+Uses rosserial and assumes the use of an Arduino Mega + Pololu motor
+controller shield + Robogaia Mega Encoder shield
+
+  </description>
+  <author>Patrick Goebel</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/pi_arduino_diff_drive</url>
+  <depend package="rosserial_arduino"/>
+  <depend package="roscpp"/>
+</package>
+
+
