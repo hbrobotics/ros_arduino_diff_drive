@@ -17,14 +17,6 @@ $ rosrun rosserial_client make_library.py SKETCHBOOK_PATH/libraries ros_arduino_
 
 where SKETCHBOOK_PATH is the path to your Arduino sketchbook directory.
 
-$ roscd ros_arduino_diff_drive/src/libraries
-
 $ cd SKETCHBOOK_PATH
 
-$ ln -s `rospack find ros_arduino_diff_drive/src/libraries/ROSArduinoDiffDrive` ./ROSArduinoDiffDrive
-
-
-
-
-
-
+$ ln -s `rospack find ros_arduino_diff_drive`/src/libraries/ROSArduinoDiffDrive .
