@@ -1,11 +1,7 @@
 bin/
 build/
 include/
-msg_gen/
-srv_gen/
+src/*/msg/
 *~
 .*~
-*.pyc
-.*.pyc
-src/*/msg/
-
+.gitignore
