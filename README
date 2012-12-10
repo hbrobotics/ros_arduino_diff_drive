@@ -30,7 +30,7 @@ Starting the Diff Controller
 
 * Compile and upload the sketch to your Arduino Mega
 
-* In a terminal window run, rosserial with the command:
+* In a terminal window run rosserial with the following launch command:
 
 $ roslaunch ros_arduino_diff_drive diff_drive.launch
 
