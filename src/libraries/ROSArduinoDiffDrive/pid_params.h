@@ -1,7 +1,24 @@
-#ifndef PIDTypes_h
-#define PIDTypes_h
+#ifndef pid_params_h
+#define pid_params_h
 
 #include <ros/time.h>
+
+/* PID Parameters */
+int Kp = 20;
+int Kd = 12;
+int Ki = 0;
+int Ko = 50;
+
+/* Define the robot paramters */
+int cpr = 8384; // Encoder ticks per revolution for the Pololu 131:1 motor
+float wheelDiameter = 0.146; // meters
+float wheelTrack = 0.291; // meters
+float ticksPerMeter = cpr / (PI * wheelDiameter);
+
+/* Stop the robot if it hasn't received a movement command
+   in this number of milliseconds */
+#define AUTO_STOP_INTERVAL 2000
+long lastMotorCommand = AUTO_STOP_INTERVAL;
 
 /* Setpoint Info For a Motor */
 typedef struct {
@@ -14,7 +31,6 @@ typedef struct {
   int output;                    // last motor setting
 }
 SetPointInfo;
-
 
 /* A struct to hold Odometry info */
 typedef struct {

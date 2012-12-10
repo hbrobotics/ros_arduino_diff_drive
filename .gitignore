@@ -1,0 +1,11 @@
+bin/
+build/
+include/
+msg_gen/
+srv_gen/
+*~
+.*~
+*.pyc
+.*.pyc
+src/*/msg/
+

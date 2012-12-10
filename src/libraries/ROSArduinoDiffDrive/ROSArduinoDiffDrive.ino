@@ -42,8 +42,6 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-/* Load the custom typedefs for tracking encoder info */
-#include "PIDTypes.h"
 
 /* Include the appropriate ROS headers */
 #include <ros.h>
@@ -53,17 +51,11 @@
 #include <ros_arduino_diff_drive/OdometryLite.h>
 #include <std_msgs/UInt32.h>
 
-/* PID Parameters */
-int Kp = 20;
-int Kd = 12;
-int Ki = 0;
-int Ko = 50;
+/* We need sin and cos for odometry calcuations */
+#include <math.h>
 
-/* Define the robot paramters */
-int cpr = 8384; // Encoder ticks per revolution for the Pololu 131:1 motor
-float wheelDiameter = 0.146; // Scout robot
-float baseWidth = 0.291; // Scout robot
-float ticksPerMeter = cpr / (PI * wheelDiameter);
+/* Load the custom typedefs for tracking encoder info */
+#include "pid_params.h"
 
 unsigned char moving = 0; // is the base in motion?
 
@@ -72,9 +64,6 @@ unsigned char moving = 0; // is the base in motion?
 
 /* The Robogaia Mega Encoder shield */
 #include "MegaEncoderCounter.h"
-
-/* We need sin and cos for odometry calcuations */
-#include <math.h>
 
 /* Create the encoder object */
 MegaEncoderCounter encoders(4); // Initializes the Mega Encoder Counter in the 4X Count Mode
@@ -98,7 +87,6 @@ char baseFrame[] = "/base_link";
 char odomFrame[] = "/odom";
 
 /* Counters to track update rates for PID and Odometry */
-unsigned long frameTime = 0;
 unsigned long nextPID = 0;
 unsigned long nextOdom = 0;
 
@@ -131,6 +119,9 @@ void cmdVelCb(const geometry_msgs::Twist& msg) {
   float x = msg.linear.x; // m/s
   float th = msg.angular.z; // rad/s
   float spd_left, spd_right;
+  
+  /* Reset the auto stop timer */
+  lastMotorCommand = millis();
 
   if (x == 0 && th == 0) {
     moving = 0;
@@ -143,7 +134,7 @@ void cmdVelCb(const geometry_msgs::Twist& msg) {
 
   if (x == 0) {
     // Turn in place
-    spd_right = th * baseWidth / 2.0;
+    spd_right = th * wheelTrack / 2.0;
     spd_left = -spd_right;
   } 
   else if (th == 0) {
@@ -152,8 +143,8 @@ void cmdVelCb(const geometry_msgs::Twist& msg) {
   } 
   else {
     // Rotation about a point in space
-    spd_left = x - th * baseWidth / 2.0;
-    spd_right = x + th * baseWidth / 2.0;
+    spd_left = x - th * wheelTrack / 2.0;
+    spd_right = x + th * wheelTrack / 2.0;
   }
 
   /* Set the target speeds in meters per second */
@@ -181,8 +172,7 @@ void doPID(SetPointInfo * p) {
   p->PrevEnc = p->Encoder;
 
   output += p->output;
-  // Accumulate Integral error *or* Limit output.
-  // Stop accumulating when output saturates
+  
   if (output >= MAXOUTPUT)
     output = MAXOUTPUT;
   else if (output <= -MAXOUTPUT)
@@ -237,7 +227,7 @@ void updateOdom() {
   dxy_ave = (dleft + dright) / 2.0;
 
   /* Compute the angle rotated */
-  dth = (dright - dleft) / baseWidth;
+  dth = (dright - dleft) / wheelTrack;
 
   /* Linear velocity */
   vxy = dxy_ave / dt;
@@ -321,9 +311,6 @@ void setup() {
   encoders.XAxisReset();
   encoders.YAxisReset();
 
-  /* Initialize the frame time */
-  frameTime = 0;
-
   /* Initialize the ROS node */
   nh.initNode();
 
@@ -339,20 +326,21 @@ void setup() {
 }
 
 void loop() {
-  frameTime = millis();
-
   /* Is it time for another PID calculation? */
-  if (frameTime > nextPID) {
+  if (millis() > nextPID) {
     updatePID();
     nextPID += PID_INTERVAL;
   }
 
-  frameTime = millis();
-
   /* Is it time for another odometry calculation? */
-  if (frameTime > nextOdom) {
+  if (millis() > nextOdom) {
     updateOdom();
     nextOdom += ODOM_INTERVAL;
+  }
+  
+  if ((millis() - lastMotorCommand) > AUTO_STOP_INTERVAL) {;
+    drive.setSpeeds(0, 0);
+    moving = 0;
   }
 
   nh.spinOnce();
