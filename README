@@ -30,11 +30,17 @@ $ rosmake
 
 $ rosrun rosserial_client make_library.py SKETCHBOOK_PATH/libraries ros_arduino_diff_drive
 
+(Note: that should be a single command line above even if it wraps to
+two lines on the screen.)
+
 where SKETCHBOOK_PATH is the path to your Arduino sketchbook directory.
 
 $ cd SKETCHBOOK_PATH
 
 $ ln -s `rospack find ros_arduino_diff_drive`/src/libraries/ROSArduinoDiffDrive ROSArduinoDiffDrive
+
+(Note: that should be a single command line above even if it wraps to
+two lines on the screen.)
 
 Starting the Diff Controller
 ============================
