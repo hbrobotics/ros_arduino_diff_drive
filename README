@@ -34,7 +34,7 @@ where SKETCHBOOK_PATH is the path to your Arduino sketchbook directory.
 
 $ cd SKETCHBOOK_PATH
 
-$ ln -s `rospack find ros_arduino_diff_drive`/src/libraries/ROSArduinoDiffDrive .
+$ ln -s `rospack find ros_arduino_diff_drive`/src/libraries/ROSArduinoDiffDrive ROSArduinoDiffDrive
 
 Starting the Diff Controller
 ============================
