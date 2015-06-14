@@ -1,5 +1,8 @@
 **NOTE**
 
+This package is depreciated and will not be further maintained.  Please use
+the ros_arduino_bridge package instead as it incorporates the differential
+drive code as well as support for sensors and PWM servos.
 
 A simple driver for an Arduino controlled differential drive robot.
 Uses rosserial and assumes the use of an Arduino Mega + Pololu motor
